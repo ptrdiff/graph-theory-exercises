@@ -5,15 +5,6 @@ import collections
 import utils
 
 
-def connected_components(G):
-    seen = set()
-    for v in G:
-        if v not in seen:
-            c = set(utils.plain_bfs_undirected(G, v))
-            yield c
-            seen.update(c)
-
-
 def draw_degree_density_hist(G):
     degree_sequence = sorted([d for n, d in G.degree()], reverse=True)
     degreeCount = collections.Counter(degree_sequence)
@@ -71,7 +62,7 @@ def average_shortest_path_length(G):
 
 if __name__ == "__main__":
     raw_data = nx.read_gexf("data/vkdata.gexf").to_undirected()
-    graph = raw_data.subgraph(max(connected_components(raw_data)))
+    graph = raw_data.subgraph(max(utils.connected_components(raw_data)))
 
     fig = draw_degree_density_hist(graph)
     fig.savefig("hist.png")

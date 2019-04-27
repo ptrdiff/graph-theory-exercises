@@ -101,6 +101,15 @@ def plain_bfs_undirected(G, source):
                 nextlevel.update(G_adj[v])
 
 
+def connected_components(G):
+    seen = set()
+    for v in G:
+        if v not in seen:
+            c = set(plain_bfs_undirected(G, v))
+            yield c
+            seen.update(c)
+
+
 def single_source_shortest_path_length(G, source, cutoff=None):
     if cutoff is None:
         cutoff = float('inf')
