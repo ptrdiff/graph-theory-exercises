@@ -25,7 +25,12 @@ def number_strongly_connected_components(G):
 
 
 def weakly_connected_components(G):
-    return utils.connected_components(G)
+    seen = set()
+    for v in G:
+        if v not in seen:
+            c = set(utils.plain_bfs_directed(G, v))
+            yield c
+            seen.update(c)
 
 
 def is_weakly_connected(G):

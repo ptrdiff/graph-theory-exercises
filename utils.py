@@ -35,7 +35,7 @@ def dfs_labeled_edges(G, source=None, depth_limit=None):
         nodes = [source]
     visited = set()
     if depth_limit is None:
-        depth_limit = len(G)
+        depth_limit = G.order()
     for start in nodes:
         if start in visited:
             continue
@@ -70,7 +70,7 @@ def dfs_postorder_nodes(G, source=None, depth_limit=None):
     return (v for u, v, d in edges if d == 'reverse')
 
 
-def plain_bfs(G, source):
+def plain_bfs_directed(G, source):
     Gsucc = G.succ
     Gpred = G.pred
 
@@ -87,10 +87,55 @@ def plain_bfs(G, source):
                 nextlevel.update(Gpred[v])
 
 
-def connected_components(G):
+def plain_bfs_undirected(G, source):
+    G_adj = G.adj
     seen = set()
-    for v in G:
-        if v not in seen:
-            c = set(plain_bfs(G, v))
-            yield c
-            seen.update(c)
+    nextlevel = {source}
+    while nextlevel:
+        thislevel = nextlevel
+        nextlevel = set()
+        for v in thislevel:
+            if v not in seen:
+                yield v
+                seen.add(v)
+                nextlevel.update(G_adj[v])
+
+
+def single_source_shortest_path_length(G, source, cutoff=None):
+    if cutoff is None:
+        cutoff = float('inf')
+    nextlevel = {source: 1}
+    return dict(single_shortest_path_length(G.adj, nextlevel, cutoff))
+
+
+def single_shortest_path_length(adj, firstlevel, cutoff):
+    seen = {}
+    level = 0
+    nextlevel = firstlevel
+
+    while nextlevel and cutoff >= level:
+        thislevel = nextlevel
+        nextlevel = {}
+        for v in thislevel:
+            if v not in seen:
+                seen[v] = level
+                nextlevel.update(adj[v])
+                yield (v, level)
+        level += 1
+    del seen
+
+
+def eccentricity(G, v=None, sp=None):
+    e = {}
+    for n in G.nbunch_iter(v):
+        if sp is None:
+            length = single_source_shortest_path_length(G, n)
+        else:
+            length = sp[n]
+
+        e[n] = max(length.values())
+
+    if v in G:
+        return e[v]
+    else:
+        return e
