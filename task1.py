@@ -46,7 +46,7 @@ def percentage_nodes_largest_weakly_connected_component(G):
 
 
 if __name__ == "__main__":
-    graph = nx.read_gexf("vkdata.gexf")
+    graph = nx.read_gexf("data/vkdata.gexf")
 
     print('Is graph strongly connected: {}'
           .format(is_strongly_connected(graph)))

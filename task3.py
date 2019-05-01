@@ -42,10 +42,14 @@ if __name__ == "__main__":
 
     x, y = list(graph)[0], list(graph)[1]
 
-    print(common_neighbors(graph, x, y))
-    print(jaccard_coefficient(graph, x, y))
-    print(adamic_adar_index(graph, x, y))
-    print(preferential_attachment(graph, x, y))
+    print('Common neighbors measure for {} and {}: {}'
+          .format(x, y, common_neighbors(graph, x, y)))
+    print('Jaccard\'s coefficient measure for {} and {}: {}'
+          .format(x, y, jaccard_coefficient(graph, x, y)))
+    print('Adamic adar index measure for {} and {}: {}'
+          .format(x, y, adamic_adar_index(graph, x, y)))
+    print('Preferential attachment measure for {} and {}: {}'
+          .format(x, y, preferential_attachment(graph, x, y)))
 
     print_result_csv(graph, 'common_neighbors.csv', common_neighbors)
     print_result_csv(graph, 'jaccard_coefficient.csv', jaccard_coefficient)
